@@ -55,6 +55,8 @@ DCS removes these constants in favor of the following,
 
 The reason behind this is to make a platform that is more natural to use for data visualization purposes. Traditionally one would have to worry about scaling your charts or data points to the canvas. With DCS the canvas will automatically form to your data, regardless if you're representing a range of 1 million or 0.5
 
+![Grid Explained](grid_explained.png)
+
 # DCS Layers & Graphics Explained
 Many data viz use cases can be just single charts of some kind. DCS can easily support this! However if you're looking to make a dashboard or interactive content which has multiple visualizations on the page DCS can support that as well!
 
