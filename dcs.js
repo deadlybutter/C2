@@ -135,7 +135,7 @@ var DCS = (function () {
       }
 
       for (var obj of this.objects) {
-        obj.render(this.draw);
+        obj.render.call(obj, this.draw);
       }
     }
   }
@@ -168,8 +168,8 @@ var DCS = (function () {
       var y = getValue(params, "y", 0, true) - (height / 2);
       this.setupPaint(params);
 
-      this.ctx.fillRect(layer.translateX(x), layer.translateY(y), layer.convertX(width), layer.convertY(height));
-      this.ctx.strokeRect(layer.translateX(x), layer.translateY(y), layer.convertX(width), layer.convertY(height))
+      this.ctx.fillRect(this.layer.translateX(x), this.layer.translateY(y), this.layer.convertX(width), this.layer.convertY(height));
+      this.ctx.strokeRect(this.layer.translateX(x), this.layer.translateY(y), this.layer.convertX(width), this.layer.convertY(height))
     }
 
     line(params) {
@@ -182,8 +182,8 @@ var DCS = (function () {
       this.setupPaint(params);
 
       this.ctx.beginPath();
-      this.ctx.moveTo(layer.translateX(startX), layer.translateY(startY));
-      this.ctx.lineTo(layer.translateX(toX), layer.translateY(toY));
+      this.ctx.moveTo(this.layer.translateX(startX), this.layer.translateY(startY));
+      this.ctx.lineTo(this.layer.translateX(toX), this.layer.translateY(toY));
       this.ctx.stroke();
     }
   }

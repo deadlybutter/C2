@@ -1,0 +1,31 @@
+<canvas id="test1" width="800" height="100"></canvas>
+<canvas id="test2" width="400" height="200"></canvas>
+<canvas id="test3" width="200" height="400"></canvas>
+
+<script src="dcs.js"></script>
+<script>
+
+  function testRender(draw) {
+    draw.rect({x: this.x, y: this.y, width: 10, height: 10});
+  }
+
+  function drawTest(id) {
+    var canvas = document.getElementById(id);
+    var gfx = new DCS.Graphics(canvas);
+
+    var centerLayer = new DCS.Layer(canvas.width / 2, canvas.height / 2, 1, 1, gfx);
+    centerLayer.debug = true;
+    var box = new DCS.Object(0, 0, centerLayer);
+    box.render = testRender;
+
+    var extraLayer = new DCS.Layer(canvas.width / 4, canvas.height / 4, 2, 2, gfx);
+    var box = new DCS.Object(0, 0, extraLayer);
+    box.render = testRender;
+
+    DCS.attachGraphics(gfx);
+  }
+
+  drawTest("test1");
+  drawTest("test2");
+  drawTest("test3");
+</script>
