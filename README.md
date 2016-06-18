@@ -5,22 +5,26 @@
 This is a **WIP** JS library that provides an simple way to draw complex visualizations in the browser. It's being built from the ground up to be highly extensible, run on HTML5 canvas and be super easy to use for data visualization.
 
 # Getting started
-1. Include DCS & add a canvas to your page.
+
+Include DCS & add a canvas to your page.
 ```
 <canvas id="test" width="600" height="600"></canvas>
 <script src="dcs.js"></script>
 ```
-2. Create a graphics interface for that canvas.
+
+Create a graphics interface for that canvas.
 ```
 var gfx = new DCS.Graphics(document.getElementById("test"));
 ```
-3. Add a grid layer to draw on.
+
+Add a grid layer to draw on.
 ```
 var layer = new DCS.Layer(200, 200, 1, 1, gfx);
 // Optionally enable debug mode to view the grid axis
 // layer.debug = true;
 ```
-4. Add a quick test object to the layer
+
+Add a quick test object to the layer
 ```
 var box = new DCS.Object(5, 5, layer);
 // !! Temp test code !!
@@ -28,7 +32,8 @@ box.render = function(ctx) {
   ctx.fillRect(layer.translateX(box.x), layer.translateY(box.y), 10, 10);
 }
 ```
-5. Attach your graphics object to the DCS render pipeline.
+
+Attach your graphics object to the DCS render pipeline.
 ```
 DCS.attachGraphics(gfx);
 ```
@@ -37,10 +42,12 @@ DCS.attachGraphics(gfx);
 DCS works on a grid that is significantly different then the default HTML5 canvas grid.
 
 In the HTML5 canvas a few things are constant,
+
 1. The top left corner is (0, 0).
 2. The canvas pixel to grid ratio is 1:1.
 
-DCS removes these constants in favor of the following.
+DCS removes these constants in favor of the following,
+
 1. Define the grid center point (0, 0) **anywhere** on the canvas.
 2. The canvas pixel to grid ratio is defined by the user (1:1, x:y).
 
