@@ -1,4 +1,4 @@
-<canvas id="test" width="400" height="400"></canvas>
+<canvas id="test" width="800" height="800"></canvas>
 
 <script src="dcs.js"></script>
 <!-- <script src="dcs_shapes.js"></script>
@@ -7,11 +7,11 @@
 
 <script>
   var gfx = new DCS.Graphics(document.getElementById("test"));
-  var layer = new DCS.Layer(200, 200, 1, 1, gfx);
+  var layer = new DCS.Layer(200, 200, 10, 10, gfx);
   layer.debug = true;
   var box = new DCS.Object(5, 5, layer);
-  box.render = function(ctx) {
-    ctx.fillRect(layer.translateX(box.x), layer.translateY(box.y), 10, 10);
+  box.render = function(draw) {
+    draw.rect({x: 0, y: 0, width: 4, height: 4});
   }
 
   DCS.attachGraphics(gfx);
