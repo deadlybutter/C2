@@ -162,13 +162,14 @@ var DCS = (function () {
     }
 
     rect(params) {
-      var x = getValue(params, "x", 0, true);
-      var y = getValue(params, "y", 0, true);
       var width = getValue(params, "width", 1, true);
       var height = getValue(params, "height", 1, true);
+      var x = getValue(params, "x", 0, true) - (width / 2);
+      var y = getValue(params, "y", 0, true) - (height / 2);
       this.setupPaint(params);
 
-      this.ctx.fillRect(layer.translateX(x - (width / 2)), layer.translateY(y - (height / 2)), layer.convertX(width), layer.convertY(height));
+      this.ctx.fillRect(layer.translateX(x), layer.translateY(y), layer.convertX(width), layer.convertY(height));
+      this.ctx.strokeRect(layer.translateX(x), layer.translateY(y), layer.convertX(width), layer.convertY(height))
     }
   }
 
