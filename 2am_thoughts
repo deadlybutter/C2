@@ -2,6 +2,10 @@ make "shape" and "axis" object extensions
 we need hover/click callbacks
 also animations... should probably make a return? maybe tho this time its simpler (just a function you can override)
 
+custom ctx object to wrap over the HTML5 one
+draw shit from center point insead of corner
+potentially easier functions to work with (eg: think line drawing...)
+
 axis / examples to make
 - line
 - bar
