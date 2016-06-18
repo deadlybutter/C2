@@ -1,260 +1,140 @@
 var DCS = (function () {
 
-  // ---
-  // LOCAL VAR SETUP
-  // ---
-
   var module = {};
+  var graphics = [];
 
-  var targetCanvas;
-  var targetCtx;
-
-  var gridWidth = 0;
-  var gridHeight = 0;
-
-  var shapes = [];
-  module.shapes = shapes;
-
-  var graphs = [];
-
-  // ---
-  // RENDERING
-  // ---
-
-  function render() {
-    if (targetCtx != undefined) {
-      targetCtx.clearRect(0, 0, getCanvasSize().width, getCanvasSize().height);
-
-      for (var graph of graphs) {
-        graph.draw();
-      }
-
-      for (var shape of shapes) {
-        shape.animate();
-        shape.draw();
-      }
-    }
-
-    window.requestAnimationFrame(render);
-  }
-
-  // ---
-  // HELPER FUNCTIONS
-  // ---
-
-  function getCanvasSize() {
-    return {
-      width: targetCanvas.width,
-      height: targetCanvas.height
-    };
-  }
-
-  function getGridSize() {
-    return {
-      width: gridWidth,
-      height: gridHeight
-    };
-  }
-  module.getGridSize = getGridSize;
-
-  function getValue(params, property, defaultVal, required) {
-    if (params == undefined || params == null) {
-      if (required) {
-        console.error(property, "is required to init");
-      }
-
-      return defaultVal;
-    }
-
-    if (params.hasOwnProperty(property)) {
-      if (typeof params[property] == "string") {
-        if (params[property].endsWith("%W")) {
-          return Number("." + params[property].replace("%W", "")) * getGridSize().width;
-        }
-        else if (params[property].endsWith("%H")) {
-          return Number("." + params[property].replace("%H", "")) * getGridSize().height;
-        }
-      }
-      return params[property];
-    }
-    else {
-      if (required) {
-        console.error(property, "is required to init");
-      }
-
-      return defaultVal;
-    }
-  }
-  module.getValue = getValue;
-
-  function translateX(x) {
-    return (getCanvasSize().width / gridWidth) * x;
-  }
-  module.translateX = translateX;
-
-  function translateY(y) {
-    return (getCanvasSize().height / gridHeight) * y;
-  }
-  module.translateY = translateY;
-
-  // ---
-  // Base Classes
-  // ---
-
-  class Animation {
-    constructor() {
-      this.shape = {};
-      this.id = Date.now();
-    }
-
-    init(shape) {
-      this.shape = shape;
-    }
-
-    perform() {
-      console.warn("Animation Perform function is empty");
-    }
-
-    end() {
-      this.shape.removeAnimation(this.id);
-    }
-  }
-  module.Animation = Animation;
-
-  class Shape {
-    constructor(customData, x, y) {
+  class DCSObject {
+    constructor(x, y, layer) {
       this.x = x;
       this.y = y;
-      this.customData = customData;
-      this.animations = [];
+      this.layer = layer;
+      this.layer.addObject(this);
     }
 
-    animate() {
-      for (var animation of this.animations) {
-        animation.perform();
-      }
+    getX() {
+      return this.x;
     }
 
-    removeAnimation(animationId) {
-      var index = this.animations.findIndex(function(animation, id) {
-        return id = animationId;
-      });
-      this.animations.splice(index, 1);
+    getY() {
+      return this.y;
     }
 
-    addAnimation(animation) {
-      animation.init(this, function(id) {
-        this.removeAnimation(id);
-      });
-      this.animations.push(animation);
-    }
-
-    draw() {
-      console.warn("Shape Draw function is empty");
+    attachCustomData(data) {
+      this.customData = data;
     }
 
     getCustomData() {
       return this.customData;
     }
-  }
-  module.Shape = Shape;
 
-  class Axis {
-    constructor(plane, title) {
-      this.plane = plane;
-      this.title = title;
-    }
-
-    draw() {
-      console.warn("Axis Draw function is empty");
+    render(ctx) {
+      // ...
     }
   }
-  module.Axis = Axis;
+  module.Object = DCSObject;
 
-  class Graph {
-    constructor(params) {
-      this.axes = {};
-      this.shapes = [];
-      this.widthPadding = getValue(params, "widthPadding", "10%W", true);
-      this.heightPadding = getValue(params, "heightPadding", "10%H", true);
+  class DCSLayer {
+    constructor(centerX, centerY, xUnitsPerPixel, yUnitsPerPixel, graphics) {
+      this.centerX = centerX;
+      this.centerY = centerY;
+      this.xUnitsPerPixel = xUnitsPerPixel;
+      this.yUnitsPerPixel = yUnitsPerPixel;
+      this.graphics = graphics;
+      this.graphics.addLayer(this);
+      this.objects = [];
+      this.debug = false;
     }
 
-    draw() {
-      for (var plane in this.axes) {
-        this.axes[plane].draw();
+    addObject(object) {
+      object.layer = this;
+      this.objects.push(object);
+    }
+
+    translateX(x) {
+      return (x * this.xUnitsPerPixel) + this.centerX;
+    }
+
+    translateY(y) {
+      return this.graphics.getTrueHeight() - ((y * this.yUnitsPerPixel) + this.centerY);
+    }
+
+    getWidth() {
+      return this.gridWidth;
+    }
+
+    getHeight() {
+      return this.gridHeight;
+    }
+
+    render() {
+      if (this.objects == undefined || this.objects.length == 0) {
+        return;
       }
 
-      for (var shape of shapes) {
-        shape.animate();
-        shape.draw();
+      var ctx = this.graphics.getCtx();
+
+      if (this.debug) {
+        ctx.beginPath();
+        ctx.moveTo(this.centerX, 0);
+        ctx.lineTo(this.centerX, this.graphics.getTrueHeight());
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, this.centerY);
+        ctx.lineTo(this.graphics.getTrueWidth(), this.centerY);
+        ctx.stroke();
+      }
+
+      for (var obj of this.objects) {
+        obj.render(ctx);
       }
     }
+  }
+  module.Layer = DCSLayer;
 
-    addAxis(axis) {
-      axis.widthPadding = this.widthPadding;
-      axis.heightPadding = this.heightPadding;
-      this.axes[axis.plane] = axis;
+  class DCSGraphics {
+    constructor(canvas) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext('2d');
+      this.layers = [];
     }
 
-    getAxis(plane) {
-      return this.axes[plane];
+    addLayer(layer) {
+      this.layers.push(layer);
     }
 
-    addShape(shape) {
-      this.shapes.push(shape);
+    getTrueWidth() {
+      return this.canvas.width;
+    }
+
+    getTrueHeight() {
+      return this.canvas.height;
+    }
+
+    getCtx() {
+      return this.ctx;
+    }
+
+    render() {
+      for (var layer of this.layers) {
+        layer.render();
+      }
     }
   }
-  module.Graph = Graph;
+  module.Graphics = DCSGraphics;
 
-  // ---
-  // SETTERS/GETTERS
-  // ---
-
-  module.setTarget = function(canvas) {
-    targetCanvas = canvas;
-    targetCtx = canvas.getContext('2d');
+  module.attachGraphics = function (gfx) {
+    graphics.push(gfx);
   }
 
-  module.getTargetCtx = function() {
-    return targetCtx;
-  }
-
-  module.getTrueWidth = function() {
-    return getCanvasSize().width;
-  }
-
-  module.getTrueHeight = function() {
-    return getCanvasSize().height;
-  }
-
-  module.getWidth = function() {
-    return gridWidth;
-  }
-
-  module.getHeight = function() {
-    return gridHeight;
-  }
-
-  module.setGridWidth = function(width) {
-    gridWidth = width;
-  }
-
-  module.setGridHeight = function(height) {
-    gridHeight = height;
-  }
-
-  module.draw = function(type, obj) {
-    if (type == "shape") {
-      shapes.push(obj);
+  function render() {
+    for (gfx of graphics) {
+      gfx.getCtx().clearRect(0, 0, gfx.getTrueWidth(), gfx.getTrueHeight());
+      gfx.render();
     }
-    else if (type == "graph") {
-      graphs.push(obj);
-    }
-  }
 
-  // ---
-  // INIT LOGIC
-  // ---
+    window.requestAnimationFrame(render);
+  }
 
   window.requestAnimationFrame(render);
   return module;
