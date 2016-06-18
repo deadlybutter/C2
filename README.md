@@ -65,3 +65,15 @@ Layer objects automatically implement the custom grid layout described in the se
 Thankfully DCS does all of this math for you, every layer has its own functions for converting your points into something that can be positioned on the actual canvas. If you're looking to plot a point, you can use the `translateX(x)` and `translateY(y)` functions. However, if you're trying to make a generic number relative to the layer grid (for example, a width or height of something), use the `convertX(x)` and `convertY(y)` functions. The reason behind this is, translate functions convert the number **and** position it relative to the center point.
 
 In addition, layer objects have an instance of `DCSGraphicsContext` attached which is explained in more detail below.
+
+# DCS Graphics Context
+DCS has a custom CanvasContext wrapper that is built automatically on each layer. The purpose is to
+
+1. Simplify the drawing process in comparison to native HTML5 canvas.
+ - For example to draw a rectangle, you need a min. of 2 lines. 1 for fill color, another for the actual fill. If you wanted to also apply a border, you're up to a min. of 4 lines.
+ - Line drawing is even more code, because you need to handle paths.
+2. Provide an example and enforce the ideas described in in the section [DCS Grid Explained](#dcs-grid-explained).
+ - The rectangle function for example automatically translates & treats the given X/Y as the rectangles center point, not top left corner.
+
+
+ The goal is to eventually cover all of the major context uses cases, however until then the native context is still accessible.
