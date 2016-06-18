@@ -1,8 +1,8 @@
 # DCS.js
-### Draw Cool Shit
-----
+*Draw Cool Shit*
 
-This is a **WIP** JS library that provides an simple way to draw complex visualizations in the browser. It's being built from the ground up to run on HTML5 canvas and the core is highly extensible.
+
+This is a **WIP** JS library that provides an simple way to draw complex visualizations in the browser. It's being built from the ground up to be highly extensible, run on HTML5 canvas and be super easy to use for data visualization.
 
 # Getting started
 1. Include DCS & add a canvas to your page.
