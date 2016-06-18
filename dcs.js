@@ -3,6 +3,28 @@ var DCS = (function () {
   var module = {};
   var graphics = [];
 
+  function getValue(params, property, defaultVal, required) {
+    if (params == undefined || params == null) {
+      if (required) {
+        console.error(property, "is required to init");
+      }
+
+      return defaultVal;
+    }
+
+    if (params.hasOwnProperty(property)) {
+      return params[property];
+    }
+    else {
+      if (required) {
+        console.error(property, "is required to init");
+      }
+
+      return defaultVal;
+    }
+  }
+  module.getValue = getValue;
+
   class DCSObject {
     constructor(x, y, layer) {
       this.x = x;
@@ -27,7 +49,7 @@ var DCS = (function () {
       return this.customData;
     }
 
-    render(ctx) {
+    render(draw) {
       // ...
     }
   }
@@ -41,6 +63,7 @@ var DCS = (function () {
       this.yUnitsPerPixel = yUnitsPerPixel;
       this.graphics = graphics;
       this.graphics.addLayer(this);
+      this.draw = new DCSGraphicsContext(this, this.graphics);
       this.objects = [];
       this.debug = false;
     }
@@ -50,12 +73,20 @@ var DCS = (function () {
       this.objects.push(object);
     }
 
+    convertX(x) {
+      return x * this.xUnitsPerPixel;
+    }
+
+    convertY(y) {
+      return y * this.yUnitsPerPixel;
+    }
+
     translateX(x) {
-      return (x * this.xUnitsPerPixel) + this.centerX;
+      return this.convertX(x) + this.centerX;
     }
 
     translateY(y) {
-      return this.graphics.getTrueHeight() - ((y * this.yUnitsPerPixel) + this.centerY);
+      return this.convertY(y) + this.centerY;
     }
 
     getWidth() {
@@ -71,14 +102,32 @@ var DCS = (function () {
         return;
       }
 
-      var ctx = this.graphics.getCtx();
-
       if (this.debug) {
+        var ctx = this.graphics.getCtx();
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#111111";
         ctx.beginPath();
         ctx.moveTo(this.centerX, 0);
         ctx.lineTo(this.centerX, this.graphics.getTrueHeight());
         ctx.stroke();
 
+        ctx.lineWidth = 0.1;
+        for (var x = 0; x < this.graphics.getTrueWidth(); x += (this.xUnitsPerPixel * 4)) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, this.graphics.getTrueHeight());
+          ctx.stroke();
+        }
+
+        for (var y = 0; y < this.graphics.getTrueHeight(); y += (this.yUnitsPerPixel * 4)) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(this.graphics.getTrueWidth(), y);
+          ctx.stroke();
+        }
+
+        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(0, this.centerY);
         ctx.lineTo(this.graphics.getTrueWidth(), this.centerY);
@@ -86,11 +135,42 @@ var DCS = (function () {
       }
 
       for (var obj of this.objects) {
-        obj.render(ctx);
+        obj.render(this.draw);
       }
     }
   }
   module.Layer = DCSLayer;
+
+  class DCSGraphicsContext {
+    constructor(layer, graphics) {
+      this.layer = layer;
+      this.graphics = graphics;
+      this.ctx = graphics.getCtx();
+    }
+
+    setupPaint(params) {
+      var fillColor = getValue(params, "fillColor", "#DDDDDD", false);
+      var borderColor = getValue(params, "borderColor", "#111111", false);
+
+      if (fillColor) {
+        this.ctx.fillStyle = fillColor;
+      }
+
+      if (borderColor) {
+        this.ctx.borderColor = borderColor;
+      }
+    }
+
+    rect(params) {
+      var x = getValue(params, "x", 0, true);
+      var y = getValue(params, "y", 0, true);
+      var width = getValue(params, "width", 1, true);
+      var height = getValue(params, "height", 1, true);
+      this.setupPaint(params);
+
+      this.ctx.fillRect(layer.translateX(x - (width / 2)), layer.translateY(y - (height / 2)), layer.convertX(width), layer.convertY(height));
+    }
+  }
 
   class DCSGraphics {
     constructor(canvas) {
