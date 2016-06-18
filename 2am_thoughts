@@ -1,0 +1,13 @@
+make "shape" and "axis" object extensions
+we need hover/click callbacks
+also animations... should probably make a return? maybe tho this time its simpler (just a function you can override)
+
+axis / examples to make
+- line
+- bar
+- radar
+- pie
+
+pick more fun things from here https://github.com/d3/d3/wiki/Gallery
+
+also one of the examples needs to be dashboardy to show the power of multiple graphics interfaces.
