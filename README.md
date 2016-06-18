@@ -4,32 +4,44 @@
 
 This is a **WIP** JS library that provides an simple way to draw complex visualizations in the browser. It's being built from the ground up to run on HTML5 canvas and the core is highly extensible.
 
-To use DCS, simply include the dcs.js file in your page & add a canvas element.
+# Getting started
+1. Include DCS & add a canvas to your page.
 ```
 <canvas id="test" width="600" height="600"></canvas>
 <script src="dcs.js"></script>
 ```
-Next tell DCS to target your Canvas.
-
-`DCS.setTarget(document.getElementById("test"));`
-
-Finally you'll need to tell DCS the virtual size of your graph. This allows you to draw charts without needing to scale or make the coords relative to your canvas coordinates, it's done automatically.
-
-For example, if your Y axis is between 1,000 and 5,000 you could do the following.
-
+2. Create a graphics interface for that canvas.
 ```
-DCS.setGridHeight(5000);
-DCS.setGridWidth(100);
+var gfx = new DCS.Graphics(document.getElementById("test"));
 ```
-In the future I'll also be adding a way to set where the grid starts. So it would look more like this `DCS.setGridHeight(1000, 5000)`.
-
-If however you prefer a 1:1 ratio between the virtual grid & the actual canvas coordinates, you can simple set the DCS grid width/height to the width/height of your canvas.
-
+3. Add a grid layer to draw on.
 ```
-<canvas id="test" width="600" height="600"></canvas>
-
-DCS.setGridHeight(600);
-DCS.setGridWidth(600);
+var layer = new DCS.Layer(200, 200, 1, 1, gfx);
+// Optionally enable debug mode to view the grid axis
+// layer.debug = true;
+```
+4. Add a quick test object to the layer
+```
+var box = new DCS.Object(5, 5, layer);
+// !! Temp test code !!
+box.render = function(ctx) {
+  ctx.fillRect(layer.translateX(box.x), layer.translateY(box.y), 10, 10);
+}
+```
+5. Attach your graphics object to the DCS render pipeline.
+```
+DCS.attachGraphics(gfx);
 ```
 
-Once you have DCS setup, checkout the other files in the docs folder to understand how you can start rendering graphics with DCS & extend it for your own purposes.
+# DCS Grid Explained
+DCS works on a grid that is significantly different then the default HTML5 canvas grid.
+
+In the HTML5 canvas a few things are constant,
+1. The top left corner is (0, 0).
+2. The canvas pixel to grid ratio is 1:1.
+
+DCS removes these constants in favor of the following.
+1. Define the grid center point (0, 0) **anywhere** on the canvas.
+2. The canvas pixel to grid ratio is defined by the user (1:1, x:y).
+
+The reason behind this is to make a platform that is more natural to use for data visualization purposes. Traditionally one would have to worry about scaling your charts or data points to the canvas. With DCS the canvas will automatically scale to your data, regardless if you're representing a range of 1 million or 0.5
