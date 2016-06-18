@@ -86,7 +86,7 @@ var DCS = (function () {
     }
 
     translateY(y) {
-      return this.convertY(y) + this.centerY;
+      return this.centerY - this.convertY(y);
     }
 
     getWidth() {
@@ -170,6 +170,21 @@ var DCS = (function () {
 
       this.ctx.fillRect(layer.translateX(x), layer.translateY(y), layer.convertX(width), layer.convertY(height));
       this.ctx.strokeRect(layer.translateX(x), layer.translateY(y), layer.convertX(width), layer.convertY(height))
+    }
+
+    line(params) {
+      var startX = getValue(params, "startX", 1, true);
+      var startY = getValue(params, "startY", 1, true);
+      var toX = getValue(params, "toX", 2, true);
+      var toY = getValue(params, "toY", 2, true);
+      var lineWidth = getValue(params, "lineWidth", 1, false);
+      this.ctx.lineWidth = lineWidth;
+      this.setupPaint(params);
+
+      this.ctx.beginPath();
+      this.ctx.moveTo(layer.translateX(startX), layer.translateY(startY));
+      this.ctx.lineTo(layer.translateX(toX), layer.translateY(toY));
+      this.ctx.stroke();
     }
   }
 
