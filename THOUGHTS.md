@@ -26,3 +26,6 @@ Depending on what is decided for the render loop, animations could be a seperate
 
 # On hover + click callback
 For changing any properties / doing something
+
+# Documentation
+Can we like write some more comments before i forget all this shit...

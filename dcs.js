@@ -25,6 +25,23 @@ var DCS = (function () {
   }
   module.getValue = getValue;
 
+  module.getRange = function(data, property) {
+    var min = 0;
+    var max = 0;
+
+    data.forEach(function(element) {
+      var value = element[property];
+      if (value < min) {
+        min = value;
+      }
+      if (value > max) {
+        max = value;
+      }
+    });
+
+    return {"min": min, "max": max};
+  }
+
   class DCSObject {
     constructor(x, y, layer) {
       this.x = x;
@@ -98,10 +115,6 @@ var DCS = (function () {
     }
 
     render() {
-      if (this.objects == undefined || this.objects.length == 0) {
-        return;
-      }
-
       if (this.debug) {
         var ctx = this.graphics.getCtx();
 
@@ -132,6 +145,10 @@ var DCS = (function () {
         ctx.moveTo(0, this.centerY);
         ctx.lineTo(this.graphics.getTrueWidth(), this.centerY);
         ctx.stroke();
+      }
+
+      if (this.objects == undefined || this.objects.length == 0) {
+        return;
       }
 
       for (var obj of this.objects) {

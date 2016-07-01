@@ -55,7 +55,7 @@ DCS removes these constants in favor of the following,
 
 The reason behind this is to make a platform that is more natural to use for data visualization purposes. Traditionally one would have to worry about scaling your charts or data points to the canvas. With DCS the canvas will automatically form to your data, regardless if you're representing a range of 1 million or 0.5
 
-![Grid Explained](grid_explainer.png) 
+![Grid Explained](grid_explainer.png)
 
 # DCS Layers & Graphics Explained
 Many data viz use cases can be just single charts of some kind. DCS can easily support this! However if you're looking to make a dashboard or interactive content which has multiple visualizations on the page DCS can support that as well!
@@ -77,5 +77,17 @@ DCS has a custom CanvasContext wrapper that is built automatically on each layer
 2. Provide an example and enforce the ideas described in in the section [DCS Grid Explained](#dcs-grid-explained).
  - The rectangle function for example automatically translates & treats the given X/Y as the rectangles center point, not top left corner.
 
+The goal is to eventually cover all of the major context uses cases, however until then the native context is still accessible.
 
- The goal is to eventually cover all of the major context uses cases, however until then the native context is still accessible.
+Once you have DCS setup, checkout the other files in the docs folder to understand how you can start rendering graphics with DCS & extend it for your own purposes.
+
+
+V2
+- Multiple canvas support
+  - automatically responsive. instead of pixels maybe we need a new name for a unit.
+- 1 Custom graphics object per Canvas
+  - Implements custom drawing functions
+  - Has render callbacks
+- customize defaults
+
+focus is now on drawing cool stuff, no layers or yadayada.
