@@ -33,3 +33,14 @@ DCS.setGridWidth(600);
 ```
 
 Once you have DCS setup, checkout the other files in the docs folder to understand how you can start rendering graphics with DCS & extend it for your own purposes.
+
+
+V2
+- Multiple canvas support
+  - automatically responsive. instead of pixels maybe we need a new name for a unit. 
+- 1 Custom graphics object per Canvas
+  - Implements custom drawing functions
+  - Has render callbacks
+- customize defaults
+
+focus is now on drawing cool stuff, no layers or yadayada.
