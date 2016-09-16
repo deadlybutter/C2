@@ -1,8 +1,7 @@
-# DCS.js
-*Draw Cool Shit*
-*I probably need a better name*
+# C2.js
+*Simple, powerful & responsive 2D rendering on HTML5 canvas*
 
-This is a **WIP** JS library that provides an simple way to draw responsive canvas graphics. DCS accepts a data object which contains an array of points to draw, and configuration on how to render every operation.
+In a nutshell, DCS uses *operations* which contains an array of relative points and a configuration on how to render them.
 
 # Getting started
 
