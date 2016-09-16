@@ -73,3 +73,12 @@ After you setup your points, you need to tell C2 how to render this data. In ord
 | cap         | What type of cap should the line have?  | 'round' |
 
 Final word of caution, render order matters! If points overlap the lower the index the lower its layered.
+
+# DIY
+C2 Uses Babel & Babili for compilation & requires Node installed.
+
+Clone the repo and run `npm install`. After installing Babel dependencies this will automatically build & minify a version of C2 in the build folder.
+
+If you want to develop on C2, you can use `npm run dev` which will watch for changes & also include a source map. After you're done use `npm run build` to run another production ready build.
+
+Both `dev` and `build` overwrite the `build/c2.js` file, and all of the examples reference this file.

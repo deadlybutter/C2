@@ -1,0 +1,31 @@
+{
+  "name": "c2",
+  "version": "1.0.0",
+  "description": "*Simple, powerful & responsive 2D rendering on HTML5 canvas*",
+  "main": "c2.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "compile": "./node_modules/.bin/babel c2.js",
+    "build": "./node_modules/.bin/babel c2.js --presets babili --out-file ./build/c2.js",
+    "dev": "./node_modules/.bin/babel c2.js --watch --source-maps --out-file ./build/c2.js",
+    "postinstall": "sh ./build/setup.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deadlybutter/DCS.git"
+  },
+  "author": "Joe Kent",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deadlybutter/DCS/issues"
+  },
+  "homepage": "https://github.com/deadlybutter/DCS#readme",
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-preset-babili": "0.0.2",
+    "babel-preset-latest": "^6.14.0"
+  },
+  "dependencies": {}
+}
