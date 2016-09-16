@@ -1,4 +1,4 @@
-var DCS = (function () {
+var C2 = (function () {
   const module = {};
 
   function get(params, key, defaultValue) {
