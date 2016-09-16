@@ -1,31 +1,83 @@
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  canvas {
+    border: 1px solid #111;
+  }
+</style>
+
 <canvas id="test1" width="800" height="100"></canvas>
 <canvas id="test2" width="400" height="200"></canvas>
 <canvas id="test3" width="200" height="400"></canvas>
 
-<script src="../dcs.js"></script>
+<script src="../c2.js"></script>
 <script>
+const points = [
+  {
+    x: 0.25,
+    y: 0.25,
+  },
+  {
+    x: .5,
+    y: .5,
+  },
+  {
+    x: .75,
+    y: .25,
+  },
+];
 
-  function testRender(draw) {
-    draw.rect({x: this.x, y: this.y, width: 10, height: 10});
-  }
+const test1 = new C2.Canvas('test1', {
+  operations: [
+    {
+      points: points,
+      style: {
+        fill: false,
+        stroke: true,
+        fillColor: '#0074D9',
+        strokeColor: '#7FDBFF',
+        lineWidth: 10,
+        join: 'round',
+        cap: 'round',
+      }
+    }
+  ]
+});
 
-  function drawTest(id) {
-    var canvas = document.getElementById(id);
-    var gfx = new DCS.Graphics(canvas);
+const test2 = new C2.Canvas('test2', {
+  operations: [
+    {
+      points: points,
+      style: {
+        fill: true,
+        stroke: false,
+        fillColor: '#0074D9',
+        strokeColor: '#7FDBFF',
+        lineWidth: 10,
+        join: 'round',
+        cap: 'round',
+      }
+    }
+  ]
+});
 
-    var centerLayer = new DCS.Layer(canvas.width / 2, canvas.height / 2, 1, 1, gfx);
-    centerLayer.debug = true;
-    var box = new DCS.Object(0, 0, centerLayer);
-    box.render = testRender;
-
-    var extraLayer = new DCS.Layer(canvas.width / 4, canvas.height / 4, 2, 2, gfx);
-    var box = new DCS.Object(0, 0, extraLayer);
-    box.render = testRender;
-
-    DCS.attachGraphics(gfx);
-  }
-
-  drawTest("test1");
-  drawTest("test2");
-  drawTest("test3");
+const test3 = new C2.Canvas('test3', {
+  operations: [
+    {
+      points: points,
+      style: {
+        fill: false,
+        stroke: true,
+        fillColor: '#0074D9',
+        strokeColor: '#7FDBFF',
+        lineWidth: 25,
+        join: 'round',
+        cap: 'round',
+      }
+    }
+  ]
+});
 </script>

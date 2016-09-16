@@ -1,16 +1,46 @@
-<canvas id="test" width="800" height="800"></canvas>
-
-<script src="../dcs.js"></script>
-
-<script>
-  var gfx = new DCS.Graphics(document.getElementById("test"));
-  var layer = new DCS.Layer(200, 200, 2, 2, gfx);
-  layer.debug = true;
-  var box = new DCS.Object(5, 5, layer);
-  box.render = function(draw) {
-    draw.rect({x: 10, y: 10, width: 4, height: 4});
-    draw.line({startX: 10, startY: 10, toX: -10, toY: -4});
+<style>
+  * {
+    margin: 0;
+    padding: 0;
   }
 
-  DCS.attachGraphics(gfx);
+  canvas {
+    border: 1px solid #111;
+  }
+</style>
+<canvas id="test" width="500" height="600"></canvas>
+
+<script src="../c2.js"></script>
+
+<script>
+  const test = {
+    operations: [
+      {
+        points: [
+          {
+            x: 0.25,
+            y: 0.25,
+          },
+          {
+            x: .5,
+            y: .5,
+          },
+          {
+            x: .75,
+            y: .25,
+          },
+        ],
+        style: {
+          fill: false,
+          stroke: true,
+          fillColor: '#0074D9',
+          strokeColor: '#7FDBFF',
+          lineWidth: 10,
+          join: 'round',
+          cap: 'round',
+        }
+      }
+    ]
+  }
+  const canvas = new C2.Canvas("test", test);
 </script>
