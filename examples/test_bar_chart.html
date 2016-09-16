@@ -1,0 +1,71 @@
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  canvas {
+    border: 1px solid #111;
+  }
+</style>
+
+<canvas id="graph" width="800" height="400"></canvas>
+
+<script src="../dcs.js"></script>
+
+<script>
+  const table = [{"id":"vel est","value":39},
+                {"id":"vitae","value":7},
+                {"id":"primis","value":38},
+                {"id":"ultrices","value":30},
+                {"id":"commodo placerat","value":23},
+                {"id":"etiam faucibus","value":23},
+                {"id":"lorem","value":19},
+                {"id":"nulla ultrices","value":25},
+                {"id":"tortor","value":3},
+                {"id":"ligula sit","value":14}];
+
+  const bars = [];
+  const barWidth = .1;
+
+  table.forEach((row, index) => {
+    const x = barWidth * index;
+    const y = 1;
+    const height = 1 - (row.value / 40);   // 40 is the max
+
+    const points = [
+      {
+        x: x,
+        y: y
+      },
+      {
+        x: x + barWidth,
+        y: y
+      },
+      {
+        x: x + barWidth,
+        y: height
+      }, {
+        x: x,
+        y: height
+      }
+    ];
+
+    const colors = [];
+    for (var i = 0; i < 3; i++) {
+      colors.push(Math.floor(Math.random() * (254)));
+    }
+    const style = {
+      fill: true,
+      fillColor: `rgb(${colors[0]}, ${colors[1]}, ${colors[2]})`
+    };
+
+    bars.push({
+      points: points,
+      style: style
+    });
+  });
+
+  const canvas = new DCS.Canvas('graph', {operations: bars});
+
+</script>
