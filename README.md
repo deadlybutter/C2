@@ -8,7 +8,7 @@ In a nutshell, C2 uses *operations* which contains an array of relative points a
 Include C2 & add a canvas to your page.
 ```
 <canvas id="test" width="800" height="800"></canvas>
-<script src="C2.js"></script>
+<script src="http://d1ipbbi7qxx6zl.cloudfront.net/assets/c2.js"></script>
 ```
 
 Create a some data to draw. (See below for documentation on this, or the examples folder)

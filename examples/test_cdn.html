@@ -1,0 +1,46 @@
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  canvas {
+    border: 1px solid #111;
+  }
+</style>
+<canvas id="test" width="500" height="600"></canvas>
+
+<script src="http://d1ipbbi7qxx6zl.cloudfront.net/assets/c2.js"></script>
+
+<script>
+  const test = {
+    operations: [
+      {
+        points: [
+          {
+            x: 0.25,
+            y: 0.25,
+          },
+          {
+            x: .5,
+            y: .5,
+          },
+          {
+            x: .75,
+            y: .25,
+          },
+        ],
+        style: {
+          fill: false,
+          stroke: true,
+          fillColor: '#0074D9',
+          strokeColor: '#7FDBFF',
+          lineWidth: 10,
+          join: 'round',
+          cap: 'round',
+        }
+      }
+    ]
+  }
+  const canvas = new C2.Canvas("test", test);
+</script>
