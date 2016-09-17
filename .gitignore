@@ -1,2 +1,3 @@
 node_modules/
-build/c2.js
+buiild/*
+!build/setup.sh
